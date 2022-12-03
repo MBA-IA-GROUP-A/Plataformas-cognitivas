@@ -12,6 +12,8 @@ class GetData:
         self.service_account_json_path = os.environ.get(
             "SERVICE_ACCOUNT_JSON_PATH")
         self.bucket_name = os.environ.get("BUCKET_NAME")
+        if not os.path.exists('tmp'):
+            os.makedirs('tmp')
 
     def get_big_query_data(self, project_id, dataset, table):
         client = bigquery.Client.from_service_account_json(
@@ -60,3 +62,19 @@ class GetData:
         blob = bucket.blob(destination_file_name)
         print('File get with success')
         return blob.download_as_string()
+
+    def get_to_temp_folder(self, destination_file_name, destination_folder = '', bucket_name=None):
+        if bucket_name is None:
+            bucket_name = self.bucket_name
+        client = storage.Client.from_service_account_json(
+            self.service_account_json_path)
+        bucket = client.get_bucket(bucket_name)
+        blob = bucket.blob(destination_file_name)
+        path = 'tmp'
+        if destination_folder and not os.path.exists(f'{path}/{destination_folder}'):
+            os.makedirs(f'{path}/{destination_folder}')
+            path = f'{path}/{destination_folder}'
+        blob.download_to_filename(f'{path}/{destination_file_name}')
+        print(f'{path}/{destination_file_name}')
+        print('File downloaded with success')
+        return f'{path}/{destination_file_name}'
