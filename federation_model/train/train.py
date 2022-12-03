@@ -7,12 +7,13 @@ import pandas as pd
 # from sklearn.model_selection import train_test_split
 import sys
 import os
-sys.path.insert(0, './get_data')
+sys.path.append('get_data')
 from get_data import GetData
 
 if __name__ == "__main__":
     pathToData = 'tmp/data.csv'
     if (os.path.exists(pathToData) == False):
+      print('Data not found, downloading...')
       getData = GetData()
       getData.get_to_temp_folder('data.csv')
 

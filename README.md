@@ -1,5 +1,7 @@
 # Trabalho final de plataformas cognitivas
 
+> Versão do python 3.9
+
 ## GET DATA
 
 A pasta get-data contem o script de extração de dados do BigQuery e salva no bucket do GCE
