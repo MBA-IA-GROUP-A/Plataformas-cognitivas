@@ -7,11 +7,10 @@ import json
 load_dotenv('.env')
 
 
-class GetData:
+class GetData():
     def __init__(self):
-        self.service_account_json_path = os.environ.get(
-            "SERVICE_ACCOUNT_JSON_PATH")
-        self.bucket_name = os.environ.get("BUCKET_NAME")
+        self.service_account_json_path = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
+        self.bucket_name = os.getenv('BUCKET_NAME')
         if not os.path.exists('tmp'):
             os.makedirs('tmp')
 
@@ -31,14 +30,14 @@ class GetData:
             self.service_account_json_path)
         bucket = client.get_bucket(bucket_name)
         blob = bucket.blob(destination_file_name)
-        blob.upload_from_string(data.to_csv(), 'text/csv')
+        blob.upload_from_string(data.to_csv(index=False), 'text/csv')
         metadata = {
             "lines": data.shape[0],
             "columns": data.shape[1],
             "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         blob_metadata = bucket.blob(
-            destination_file_name.replace(".csv", ".json"))
+            destination_file_name.split('.')[0] + '.json')
         blob_metadata.upload_from_string(
             json.dumps(metadata), 'application/json')
         print('Csv file uploaded in storage')
