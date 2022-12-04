@@ -11,3 +11,5 @@ seaborn==0.12.1
 tensorflow==2.11.0
 tensorflow-gpu==2.11.0
 numpy==1.23.4
+azureml==0.2.7
+azureml-core==1.26.1
