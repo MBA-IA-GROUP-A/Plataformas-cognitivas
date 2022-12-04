@@ -7,18 +7,15 @@ import pandas as pd
 # from sklearn.model_selection import train_test_split
 import sys
 import os
-sys.path.append('get_data')
-from get_data import GetData
+sys.path.append('normalization')
+from normalization import NormalizedData
+
 
 if __name__ == "__main__":
-    pathToData = 'tmp/data.csv'
-    if (os.path.exists(pathToData) == False):
-      print('Data not found, downloading...')
-      getData = GetData()
-      getData.get_to_temp_folder('data.csv')
+    normalizedData = NormalizedData()
 
-    data = pd.read_csv(pathToData)
-
+    dataset = normalizedData.normalize_data()
+    print(dataset.head())
     pass
  
     # # Carrega os dados
