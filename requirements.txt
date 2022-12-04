@@ -9,4 +9,5 @@ joblib==1.2.0
 matplotlib==3.6.2
 seaborn==0.12.1
 tensorflow==2.11.0
+tensorflow-gpu==2.11.0
 numpy==1.23.4
