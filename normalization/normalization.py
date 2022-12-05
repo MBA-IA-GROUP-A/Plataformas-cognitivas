@@ -95,6 +95,18 @@ class NormalizedData():
     self.dataset = pd.read_csv(self.pathToData)
 
 
+  def normalize_to_csv(self):
+    path = 'tmp/data_normalized.csv'
+    dataToCsv = []
+
+    if 'ID' in self.dataset :
+      dataToCsv = self.normalize_data()
+    else:
+      dataToCsv = self.dataset
+
+    dataToCsv.to_csv(path, index=False)
+    return path
+
   def normalize_data(self):   
     self.dataset.drop(['ID'], axis=1, inplace=True)
     self.dataset.drop(['year'], axis=1, inplace=True)
