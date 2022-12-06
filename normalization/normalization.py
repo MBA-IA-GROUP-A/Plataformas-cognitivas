@@ -127,7 +127,7 @@ class NormalizedData():
     for field in self.median_na_fields:
       self.__fill_na_median(field)
 
-    print('Dataset normalized: ', self.dataset.info())
+    print('Dataset normalized')
 
     return self.dataset
 

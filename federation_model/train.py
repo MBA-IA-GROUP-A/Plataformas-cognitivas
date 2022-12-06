@@ -2,15 +2,18 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from keras import layers
+from dotenv import load_dotenv
 import sys
+import uuid
+import os
+from azureml.core.authentication import InteractiveLoginAuthentication
 sys.path.append('normalization')
 from normalization import NormalizedData
-from azureml.core import Workspace, Dataset, Experiment
+from azureml.core import Workspace, Experiment
 
-# subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
-# resource_group = 'FIAP-IA'
-# workspace_name = 'FIAP-IA'
-# workspace = Workspace(subscription_id, resource_group, workspace_name)
+load_dotenv('.env')
+
+workspace = Workspace.from_config()
 
 def norm(x):
   return (x - train_stats['mean']) / train_stats['std']
@@ -21,7 +24,6 @@ def build_model():
     layers.Dense(64, activation='relu'),
     layers.Dense(1)
   ])
-  # optimizer = tf.keras.optimizers.RMSprop(0.001)
   model.compile(loss='mse', optimizer="adam", metrics=['mae', 'mse'])
   return model
 
@@ -38,9 +40,12 @@ if __name__ == "__main__":
     target = 'Status'
     EPOCHS = 10
 
-    # experiment = Experiment(workspace=workspace, name="federation_model")
-    # run = experiment.start_logging()
-    # run.log("Tipo", "Federation Model")
+    experiment = Experiment(workspace=workspace, name="federation_model")
+    run = experiment.start_logging(run_id=str(uuid.uuid1()),
+                               display_name="Federation Model " + str(uuid.uuid1()),
+                               outputs="model",
+                               snapshot_directory="federation-model-data")
+    run.log("Tipo", "Federation Model")
 
     train_dataset = dataset.sample(frac=0.8,random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
@@ -63,11 +68,12 @@ if __name__ == "__main__":
     model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split = 0.2, verbose=0, callbacks=[early_stop, PrintDot()])
                       
     loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
-    print("Erro médio do conjunto de teste: {:5.2f} MPG".format(mae))
+    run.log("Erro médio do conjunto de teste:", mae)
 
     model.save('models/federation_model')
 
     name = 'federation_model.pb'
     # run.upload_file(name=name, path_or_stream=f'models/federation_model/{name}')
-    # run.complete()
+    run.complete()
+    run.wait_for_completion()
     pass
