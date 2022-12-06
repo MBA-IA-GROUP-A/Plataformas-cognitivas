@@ -13,7 +13,12 @@ from azureml.core import Workspace, Experiment
 
 load_dotenv('.env')
 
-workspace = Workspace.from_config()
+subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
+resource_group = 'FIAP-IA'
+workspace_name = 'grupo-demo-1-vini'
+
+workspace = Workspace(subscription_id, resource_group, workspace_name)
+# workspace = Workspace.from_config()
 
 def norm(x):
   return (x - train_stats['mean']) / train_stats['std']
