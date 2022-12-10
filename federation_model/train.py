@@ -2,6 +2,7 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from keras import layers
+from google.cloud import storage
 from dotenv import load_dotenv
 import sys
 import uuid
@@ -10,6 +11,7 @@ from azureml.core.authentication import InteractiveLoginAuthentication
 sys.path.append('normalization')
 from normalization import NormalizedData
 from azureml.core import Workspace, Experiment
+import glob
 
 load_dotenv('.env')
 
@@ -81,4 +83,27 @@ if __name__ == "__main__":
     # run.upload_file(name=name, path_or_stream=f'models/federation_model/{name}')
     # run.complete()
     # run.wait_for_completion()
+
+    bucket_name = os.getenv('BUCKET_NAME')
+    service_account_json_path = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
+    client = storage.Client.from_service_account_json(service_account_json_path)
+    bucket = client.get_bucket(bucket_name)
+
+    blob = bucket.blob('federation_model/saved_model.pb')
+    blob.upload_from_filename('tmp/models/federation_model/saved_model.pb')
+
+    blob = bucket.blob('federation_model/fingerprint.pb')
+    blob.upload_from_filename('tmp/models/federation_model/fingerprint.pb')
+
+    blob = bucket.blob('federation_model/keras_metadata.pb')
+    blob.upload_from_filename('tmp/models/federation_model/keras_metadata.pb')
+
+    blob = bucket.blob('federation_model/variables/variables.index')
+    blob.upload_from_filename('tmp/models/federation_model/variables/variables.index')
+
+    blob = bucket.blob('federation_model/variables/variables.data-00000-of-00001')
+    blob.upload_from_filename('tmp/models/federation_model/variables/variables.data-00000-of-00001')
+
+
+    print('Modelo salvo com sucesso!')
     pass
