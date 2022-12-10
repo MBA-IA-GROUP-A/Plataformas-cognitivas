@@ -84,10 +84,14 @@ class NormalizedData():
   ]
 
   def __init__(self):
-    pathToData = 'tmp/data.csv'
+    pathToData = 'tmp/data/data.csv'
     if (os.path.exists(pathToData) == False):
       print('Data not found, downloading...')
       self.get_data = GetData()
+
+      if not os.path.exists('tmp/data'):
+        os.makedirs('tmp/data')
+
       self.pathToData = self.get_data.get_to_temp_folder('data.csv')
     else:
       self.pathToData = pathToData
@@ -96,7 +100,11 @@ class NormalizedData():
 
 
   def normalize_to_csv(self):
-    path = 'tmp/data_normalized.csv'
+    path = 'tmp/data/data_normalized.csv'
+
+    if not os.path.exists('tmp/data'):
+      os.makedirs('tmp/data')
+
     dataToCsv = []
 
     if 'ID' in self.dataset :

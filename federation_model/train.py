@@ -13,11 +13,11 @@ from azureml.core import Workspace, Experiment
 
 load_dotenv('.env')
 
-subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
-resource_group = 'FIAP-IA'
-workspace_name = 'grupo-demo-1-vini'
+# subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
+# resource_group = 'FIAP-IA'
+# workspace_name = 'grupo-demo-1-vini'
 
-workspace = Workspace(subscription_id, resource_group, workspace_name)
+# workspace = Workspace(subscription_id, resource_group, workspace_name)
 # workspace = Workspace.from_config()
 
 def norm(x):
@@ -45,12 +45,12 @@ if __name__ == "__main__":
     target = 'Status'
     EPOCHS = 10
 
-    experiment = Experiment(workspace=workspace, name="federation_model")
-    run = experiment.start_logging(run_id=str(uuid.uuid1()),
-                               display_name="Federation Model " + str(uuid.uuid1()),
-                               outputs="model",
-                               snapshot_directory="federation-model-data")
-    run.log("Tipo", "Federation Model")
+    # experiment = Experiment(workspace=workspace, name="federation_model")
+    # run = experiment.start_logging(run_id=str(uuid.uuid1()),
+    #                            display_name="Federation Model " + str(uuid.uuid1()),
+    #                            outputs="model",
+    #                            snapshot_directory="federation-model-data")
+    # run.log("Tipo", "Federation Model")
 
     train_dataset = dataset.sample(frac=0.8,random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
@@ -73,12 +73,12 @@ if __name__ == "__main__":
     model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split = 0.2, verbose=0, callbacks=[early_stop, PrintDot()])
                       
     loss, mae, mse = model.evaluate(normed_test_data, test_labels, verbose=2)
-    run.log("Erro médio do conjunto de teste:", mae)
+    # run.log("Erro médio do conjunto de teste:", mae)
 
-    model.save('models/federation_model')
+    model.save('tmp/models/federation_model')
 
     name = 'federation_model.pb'
     # run.upload_file(name=name, path_or_stream=f'models/federation_model/{name}')
-    run.complete()
-    run.wait_for_completion()
+    # run.complete()
+    # run.wait_for_completion()
     pass

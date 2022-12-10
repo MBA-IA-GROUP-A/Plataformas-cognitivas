@@ -6,7 +6,6 @@ import json
 
 load_dotenv('.env')
 
-
 class GetData():
     def __init__(self):
         self.service_account_json_path = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
@@ -69,7 +68,7 @@ class GetData():
             self.service_account_json_path)
         bucket = client.get_bucket(bucket_name)
         blob = bucket.blob(destination_file_name)
-        path = 'tmp'
+        path = 'tmp/data'
         if destination_folder and not os.path.exists(f'{path}/{destination_folder}'):
             os.makedirs(f'{path}/{destination_folder}')
             path = f'{path}/{destination_folder}'
