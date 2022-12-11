@@ -1,50 +1,93 @@
-import joblib
-import pandas as pd
-import json
-import numpy as np
-from flask import Flask, jsonify, request
-import os
-import threading
-from flask import Flask, request
-import tensorflow as tf
+from flask import Flask,request, Response, make_response
+import requests
+import sys, os, io, uuid, datetime, json, zipfile
 
-class NpEncoder(json.JSONEncoder):
-  def default(self, obj):
-    if isinstance(obj, np.integer):
-      return int(obj)
-    elif isinstance(obj, np.floating):
-      return float(obj)
-    elif isinstance(obj, np.ndarray):
-      return obj.tolist()
-    else:
-      return super(NpEncoder, self).default(obj)
-
-# Define the Flask app
 app = Flask(__name__)
 
-# Define a route for the model
-@app.route('/federation/predict', methods=['POST'])
-def predict():
-  print(request.values)
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return 'Model Manager is running!'
+
+
+def try_or(fn, default=None):
+    try:
+        return fn()
+    except:
+        return default
+
+def logapp(jsoncontent: dict, sufix: str = None):
+    try:
+        logpath = f"./Log/{str( uuid.uuid1() )} EXEC {str(sufix)}.log"
+        with open(logpath, 'w') as fp:
+            json.dump(jsoncontent, fp, indent=2)
+    except Exception as err:
+        print(err)
+        pass
+
+@app.route('/predict',methods=['POST'])
+def predict(request = request):
+  global SITE_NAME
+  excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+  reqtime = datetime.datetime.utcnow()
+  logg_track = {
+    "reqtime": str(reqtime),
+    "REMOTE_ADDR": request.environ.get('REMOTE_ADDR'),
+    "input": {
+      "base_url": request.base_url,
+      "method": request.method,
+      "args": request.args,
+      "content": {}
+    },
+    "output": {}
+  }
+
+  #Carrega as configurações, a cada chamada
+  with open('/config/microservices.json') as json_file:
+    microservices_config = json.load(json_file)
 
   try:
-    model = tf.keras.models.load_model('tmp/models/federation_model.h5')
+    mymodel = request.args['model']
+    mymodel_url = microservices_config["models"][mymodel]['url']
+    logg_track["model"] = mymodel
+  except:
+    raise Exception("The model must be informed in the 'model' argument and must be a valid model in the settings (config/microservices.json)")
 
-    data = request.get_json()
+  json_content = try_or(lambda: request.get_json(), {})
+  logg_track["input"]["content"] = json_content
 
-    # verify data shape matriz 1x51
-    if len(data) != 1 or len(data[0]) != 51:
-      ret = json.dumps({"error_message": "Expected data shape: 1x51"})
-      return app.response_class(response=ret, status=400, mimetype='application/json')
+  # if request.method=='GET':
+  #     resp = requests.get(url=mymodel_url, json=json_content)
+  if request.method=='POST':
+    resp = requests.post(url=mymodel_url, json=json_content)
+  else:
+    raise Exception("Method not allowed.")
 
-    predictions = model.predict(data)
+  headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
+  response = Response(resp.content, resp.status_code, headers)
+  resp_content = json.loads(resp.content)
+  logg_track["output"].update({"content": resp_content, "status_code": resp.status_code, "headers": headers})
+  logapp(jsoncontent=logg_track, sufix=reqtime.strftime("%Y%m%d-%H%M%S.%f"))
+  return response
 
-    ret = json.dumps({ 'result': predictions[0][0] }, cls=NpEncoder)
-    return app.response_class(response=ret, status=200, mimetype='application/json')
-  except Exception as err:
-    ret = json.dumps({"error_message": str(err)})
-    return app.response_class(response=ret, status=500, mimetype='application/json')
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+  FILEPATH = "./Log"
+  fileobj = io.BytesIO()
+  with zipfile.ZipFile(fileobj, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+    for root, dirs, files in os.walk(FILEPATH):
+      for file in files:
+        zip_file.write(os.path.join(root, file))
+  fileobj.seek(0)
+  response = make_response(fileobj.read())
+  response.headers.set('Content-Type', 'zip')
+  response.headers.set('Content-Disposition', 'attachment', filename='Logs.zip')
+  return response
 
 if __name__ == '__main__':
-    print(f"Server, id: {os.getpid()}, thread: {threading.current_thread().ident}")
-    app.run(port=8080, host='0.0.0.0')
+    args = sys.argv[1:]
+    if len(args) < 1:
+        args.append('8080')
+    print(args)
+
+    app.run(port=args[0], host='0.0.0.0')
+    pass
