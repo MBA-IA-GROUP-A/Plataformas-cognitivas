@@ -1,13 +1,13 @@
-import joblib
-import pandas as pd
 import json
+import pandas as pd
 import numpy as np
-from flask import Flask, jsonify, request
+from flask import Flask, request
 import os
 import threading
 from flask import Flask, request
 import tensorflow as tf
 import train
+import sys
 
 class NpEncoder(json.JSONEncoder):
   def default(self, obj):
@@ -51,4 +51,10 @@ if __name__ == '__main__':
     train.main()
 
   print(f"Server, id: {os.getpid()}, thread: {threading.current_thread().ident}")
-  app.run(port=8080, host='0.0.0.0')
+  args = sys.argv[1:]
+  if len(args) < 1:
+      args.append('8080')
+  print(args)
+
+  app.run(port=args[0], host='0.0.0.0')
+  pass
