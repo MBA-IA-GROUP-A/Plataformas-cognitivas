@@ -22,10 +22,10 @@ load_dotenv('.env')
 # workspace = Workspace(subscription_id, resource_group, workspace_name)
 # workspace = Workspace.from_config()
 
-def norm(x):
+def norm(x, train_stats):
   return (x - train_stats['mean']) / train_stats['std']
 
-if __name__ == "__main__":
+def main():
     normalizedData = NormalizedData()
 
     dataset = normalizedData.normalize_data()
@@ -50,8 +50,8 @@ if __name__ == "__main__":
     train_labels = train_dataset.pop(target)
     test_labels = test_dataset.pop(target)
 
-    normed_train_data = norm(train_dataset)
-    normed_test_data = norm(test_dataset)
+    normed_train_data = norm(train_dataset, train_stats)
+    normed_test_data = norm(test_dataset, train_stats)
     
     model = keras.Sequential([
       layers.Flatten(input_shape=[len(train_dataset.keys())]),
@@ -85,4 +85,7 @@ if __name__ == "__main__":
     blob.upload_from_filename('tmp/models/federation_model.h5')
 
     print('Model saved!')
-    pass
+
+if __name__ == "__main__":
+  main()
+  pass

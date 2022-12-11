@@ -7,6 +7,7 @@ import os
 import threading
 from flask import Flask, request
 import tensorflow as tf
+import train
 
 class NpEncoder(json.JSONEncoder):
   def default(self, obj):
@@ -46,5 +47,8 @@ def predict(request = request):
     return app.response_class(response=ret, status=500, mimetype='application/json')
 
 if __name__ == '__main__':
-    print(f"Server, id: {os.getpid()}, thread: {threading.current_thread().ident}")
-    app.run(port=8080, host='0.0.0.0')
+  if not os.path.exists('tmp/models/federation_model.h5'):
+    train.main()
+
+  print(f"Server, id: {os.getpid()}, thread: {threading.current_thread().ident}")
+  app.run(port=8080, host='0.0.0.0')

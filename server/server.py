@@ -6,23 +6,23 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return 'Model Manager is running!'
+  return 'Model Manager is running!'
 
 
 def try_or(fn, default=None):
-    try:
-        return fn()
-    except:
-        return default
+  try:
+    return fn()
+  except:
+    return default
 
 def logapp(jsoncontent: dict, sufix: str = None):
-    try:
-        logpath = f"./Log/{str( uuid.uuid1() )} EXEC {str(sufix)}.log"
-        with open(logpath, 'w') as fp:
-            json.dump(jsoncontent, fp, indent=2)
-    except Exception as err:
-        print(err)
-        pass
+  try:
+    logpath = f"./Log/{str( uuid.uuid1() )} EXEC {str(sufix)}.log"
+    with open(logpath, 'w') as fp:
+        json.dump(jsoncontent, fp, indent=2)
+  except Exception as err:
+    print(err)
+    pass
 
 @app.route('/predict',methods=['POST'])
 def predict(request = request):
