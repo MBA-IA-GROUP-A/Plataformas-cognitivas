@@ -132,6 +132,8 @@ class NormalizedData():
     self.__normalize_age()
     self.__normalize_region()
 
+    self.dataset['LTV'] = pd.to_numeric(self.dataset['LTV'], downcast='integer')
+
     for field in self.median_na_fields:
       self.__fill_na_median(field)
 

@@ -55,27 +55,26 @@ if __name__ == "__main__":
     normed_test_data = norm(test_dataset)
     
     model = keras.Sequential([
-      # layers.Dense(64, activation='relu', input_shape=[len(train_dataset.keys())]),
+      layers.Flatten(input_shape=[len(train_dataset.keys())]),
       # layers.Dense(64, activation='relu'),
       # layers.Dense(1)
-      layers.Flatten(input_shape=[len(train_dataset.keys())]),
-      layers.Dense(64, activation='relu'),
+      # layers.Flatten(input_shape=[len(train_dataset.keys())]),
+      layers.Dense(128, activation='relu'),
       layers.Dropout(0.2),
-      layers.Dense(10, activation='softmax')
+      tf.keras.layers.Dense(1, activation='sigmoid')
     ])
     # model.compile(loss='sparse_categorical_crossentropy', optimizer="adam", metrics=['mae', 'mse','accuracy'])
-    model.compile(loss='mse', optimizer="adam", metrics=['mae', 'mse','accuracy'])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['mae', 'mse','accuracy'])
 
     early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
 
     # model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split = 0.2, verbose=0, callbacks=[early_stop])
     model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split = 0.2, callbacks=[early_stop])
                       
-    loss, mae, mse, accuracy = model.evaluate(normed_test_data, test_labels, verbose=2)
-    print("Testing set Mean Abs Error: {:5.2f} ".format(mae))
-    print("Testing set Mean Squared Error: {:5.2f} ".format(mse))
+    loss, accuracy = model.evaluate(normed_test_data, test_labels, verbose=2)
     print("Testing set Accuracy: {:5.2f} ".format(accuracy))
-    # run.log("Erro médio do conjunto de teste:", mae)
+    # run.log("Accurary:", accuracy)
 
     model.save('tmp/models/federation_model.h5')
 
@@ -104,5 +103,5 @@ if __name__ == "__main__":
     # blob.upload_from_filename('tmp/models/federation_model/variables/variables.data-00000-of-00001')
 
 
-    print('Modelo salvo com sucesso!')
+    print('Model saved!')
     pass
