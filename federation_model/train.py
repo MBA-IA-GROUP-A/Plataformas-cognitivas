@@ -38,7 +38,7 @@ if __name__ == "__main__":
     #                            display_name="Federation Model " + str(uuid.uuid1()),
     #                            outputs="model",
     #                            snapshot_directory="federation-model-data")
-    # run.log("Tipo", "Federation Model")
+    # run.log("Type", "Federation Model")
 
     train_dataset = dataset.sample(frac=0.8,random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
@@ -56,20 +56,15 @@ if __name__ == "__main__":
     
     model = keras.Sequential([
       layers.Flatten(input_shape=[len(train_dataset.keys())]),
-      # layers.Dense(64, activation='relu'),
-      # layers.Dense(1)
-      # layers.Flatten(input_shape=[len(train_dataset.keys())]),
       layers.Dense(128, activation='relu'),
       layers.Dropout(0.2),
       tf.keras.layers.Dense(1, activation='sigmoid')
     ])
-    # model.compile(loss='sparse_categorical_crossentropy', optimizer="adam", metrics=['mae', 'mse','accuracy'])
+
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['mae', 'mse','accuracy'])
 
     early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
 
-    # model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split = 0.2, verbose=0, callbacks=[early_stop])
     model.fit(normed_train_data, train_labels, epochs=EPOCHS, validation_split = 0.2, callbacks=[early_stop])
                       
     loss, accuracy = model.evaluate(normed_test_data, test_labels, verbose=2)
@@ -78,7 +73,7 @@ if __name__ == "__main__":
 
     model.save('tmp/models/federation_model.h5')
 
-    # run.upload_file(name=name, path_or_stream=f'models/federation_model.h5')
+    # run.upload_file(name='federation_model.h5', path_or_stream=f'tmp/models/federation_model.h5')
     # run.complete()
     # run.wait_for_completion()
 
@@ -89,19 +84,6 @@ if __name__ == "__main__":
 
     blob = bucket.blob('federation_model/federation_model.h5')
     blob.upload_from_filename('tmp/models/federation_model.h5')
-
-    # blob = bucket.blob('federation_model/fingerprint.pb')
-    # blob.upload_from_filename('tmp/models/federation_model/fingerprint.pb')
-
-    # blob = bucket.blob('federation_model/keras_metadata.pb')
-    # blob.upload_from_filename('tmp/models/federation_model/keras_metadata.pb')
-
-    # blob = bucket.blob('federation_model/variables/variables.index')
-    # blob.upload_from_filename('tmp/models/federation_model/variables/variables.index')
-
-    # blob = bucket.blob('federation_model/variables/variables.data-00000-of-00001')
-    # blob.upload_from_filename('tmp/models/federation_model/variables/variables.data-00000-of-00001')
-
 
     print('Model saved!')
     pass
