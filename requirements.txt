@@ -14,4 +14,4 @@ azureml-core==1.48.0
 azureml-sdk==1.48.0
 waitress==2.1.2
 flask==2.2.2
-numpy==1.23.4
+numpy==1.22.0
