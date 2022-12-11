@@ -43,11 +43,11 @@ def predict(request = request):
   }
 
   #Carrega as configurações, a cada chamada
-  with open('/config/microservices.json') as json_file:
+  with open('config/microservices.json') as json_file:
     microservices_config = json.load(json_file)
-
   try:
-    mymodel = request.args['model']
+    data = request.get_json()
+    mymodel = data['model']
     mymodel_url = microservices_config["models"][mymodel]['url']
     logg_track["model"] = mymodel
   except:
@@ -55,14 +55,11 @@ def predict(request = request):
 
   json_content = try_or(lambda: request.get_json(), {})
   logg_track["input"]["content"] = json_content
-
-  # if request.method=='GET':
-  #     resp = requests.get(url=mymodel_url, json=json_content)
   if request.method=='POST':
-    resp = requests.post(url=mymodel_url, json=json_content)
+    resp = requests.post(url=mymodel_url, json=json_content['data'])
   else:
     raise Exception("Method not allowed.")
-
+  print('Request done')
   headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
   response = Response(resp.content, resp.status_code, headers)
   resp_content = json.loads(resp.content)
