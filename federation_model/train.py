@@ -46,7 +46,6 @@ if __name__ == "__main__":
     train_stats = train_dataset.describe()
     train_stats.pop(target)
     train_stats = train_stats.transpose()
-    train_stats
     
     train_labels = train_dataset.pop(target)
     test_labels = test_dataset.pop(target)
