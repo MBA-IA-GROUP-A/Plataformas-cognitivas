@@ -7,3 +7,4 @@ tmp
 models
 .azureml
 Log
+_credentials.json
