@@ -10,14 +10,16 @@ def create_mv(compute):
   config = {
     "name": "model-manager-vm",
     "zone": "us-east1-b",
-    "machineType": 'zones/{}/machineTypes/n1-standard-1'.format(zone),
+    "startRestricted": False,
+    "machineType": 'zones/{}/machineTypes/e2-small'.format(zone),
     "subnet": "https://www.googleapis.com/compute/v1/projects/{}/regions/us-east1/subnetworks/default".format(project),
     "tags": {
       "items": ["http-server", "https-server", "model-manager-tag"]
     },
     "networkInterfaces": [
       {
-        "network": "https://www.googleapis.com/compute/v1/projects/{}/global/networks/default".format(project),
+        "network": "https://www.googleapis.com/compute/v1/projects/wallbee-app/global/networks/default",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/wallbee-app/regions/us-central1/subnetworks/default",
         "accessConfigs": [
           {
             "name": "External NAT",
@@ -45,7 +47,14 @@ def create_mv(compute):
     },
     'serviceAccounts': [{
       'email': 'ia-service-account@wallbee-app.iam.gserviceaccount.com',
-      'scopes': ['https://www.googleapis.com/auth/cloud-platform']
+      'scopes': ['https://www.googleapis.com/auth/cloud-platform',
+          "https://www.googleapis.com/auth/devstorage.read_only",
+          "https://www.googleapis.com/auth/logging.write",
+          "https://www.googleapis.com/auth/monitoring.write",
+          "https://www.googleapis.com/auth/servicecontrol",
+          "https://www.googleapis.com/auth/service.management.readonly",
+          "https://www.googleapis.com/auth/trace.append"
+        ]
     }]
   }
 
@@ -108,9 +117,16 @@ def prepare_vm():
 
   subprocess.run(["gcloud", "auth", "activate-service-account", credentials["client_email"], "--key-file={}".format(os.getenv('SERVICE_ACCOUNT_JSON_PATH'))])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:~/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./vm/setup_vm.sh'"])
+  subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./run_model_manager.sh'"])
   pass
 
 if __name__ == "__main__":
+  pathToFederationModel = 'tmp/models/federation_model.h5'
+  if (os.path.exists(pathToFederationModel) == False):
+    print('Federation Model not found, train a new model...')
+    subprocess.run(["python", "federation_model/train.py"])
+
   os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
 
   compute = googleapiclient.discovery.build('compute', 'v1')
