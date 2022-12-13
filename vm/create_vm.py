@@ -32,7 +32,7 @@ def create_mv(compute):
         "autoDelete": True,
         "initializeParams": {
           "sourceImage": "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20200529",
-          "diskSizeGb": "10",
+          "diskSizeGb": "50",
           "diskType": "https://www.googleapis.com/compute/v1/projects/{}/zones/us-east1-b/diskTypes/pd-standard".format(project)
         }
       }
@@ -107,7 +107,7 @@ def prepare_vm():
     credentials = json.load(cred_file)
 
   subprocess.run(["gcloud", "auth", "activate-service-account", credentials["client_email"], "--key-file={}".format(os.getenv('SERVICE_ACCOUNT_JSON_PATH'))])
-  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:/home/developer_wall_app", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:~/", "--project", "wallbee-app"])
   pass
 
 if __name__ == "__main__":

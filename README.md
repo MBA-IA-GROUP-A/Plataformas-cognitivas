@@ -19,10 +19,10 @@ Para gerar os dados normalizados para treino basta executar `python normalizatio
 ## VM
 
 Para criar a VM no GCE basta executar `python vm/create_vm.py`. Essa instrução usa o credentials do projeto e o SSH local para fazer copia de arquivos.
-Após isso, logar na VM (pelo painel ou pelo terminal) e executar:
+Após isso, logar na VM (pelo painel ou pelo terminal), entrar na pasta do usuário que os arquivos foram copiados (geralmente o usuário SSH que rodou o comando anterior) e executar:
 
-1. `bash /home/developer_wall_app/Plataformas/vm/setup_vm.sh`
-2. `sudo bash /home/developer_wall_app/Plataformas/run_model_manager.sh`
+1. `bash vm/setup_vm.sh`
+2. `sudo bash run_model_manager.sh`
 
 ## Docker
 
