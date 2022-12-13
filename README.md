@@ -16,6 +16,14 @@ A pasta get-data contem o script de extração de dados do BigQuery e salva no b
 
 Para gerar os dados normalizados para treino basta executar `python normalization/generated_normalize_csv.py`
 
+## VM
+
+Para criar a VM no GCE basta executar `python vm/create_vm.py`. Essa instrução usa o credentials do projeto e o SSH local para fazer copia de arquivos.
+Após isso, logar na VM (pelo painel ou pelo terminal) e executar:
+
+1. `bash /home/developer_wall_app/Plataformas/vm/setup_vm.sh`
+2. `sudo bash /home/developer_wall_app/Plataformas/run_model_manager.sh`
+
 ## Docker
 
 ### Buildando os modelos

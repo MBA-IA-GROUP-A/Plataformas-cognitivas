@@ -1,6 +1,8 @@
 import googleapiclient.discovery
 from dotenv import load_dotenv
 import os
+import subprocess
+import json
 
 load_dotenv('.env')
 
@@ -99,6 +101,15 @@ def create_firewall(compute):
   print(firewall)
   return firewall
 
+def prepare_vm():
+  credentials = None
+  with open(os.getenv('SERVICE_ACCOUNT_JSON_PATH')) as cred_file:
+    credentials = json.load(cred_file)
+
+  subprocess.run(["gcloud", "auth", "activate-service-account", credentials["client_email"], "--key-file={}".format(os.getenv('SERVICE_ACCOUNT_JSON_PATH'))])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:/home/developer_wall_app", "--project", "wallbee-app"])
+  pass
+
 if __name__ == "__main__":
   os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
 
@@ -136,4 +147,5 @@ if __name__ == "__main__":
   if not existsFirewall:
     create_firewall(compute)
 
+  prepare_vm()
   pass
