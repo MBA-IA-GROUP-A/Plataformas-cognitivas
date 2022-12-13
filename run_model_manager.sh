@@ -13,8 +13,8 @@ docker run -d --network plat_network -p 10001:8080 --restart always --name feder
 echo "generate config"
 bash generate_config.sh
 
-# echo "run platserver"
-# docker run -it --name platserver --network plat_network -p 8080:8080 -v $(pwd)/config:/server/config platserver /bin/bash
+echo "run platserver"
+docker run -d --name platserver --network plat_network -p 8080:8080 -v $(pwd)/config:/server/config platserver /bin/bash
 
 echo "run modelmanager"
 docker run -d --network plat_network -p 443:8080 --restart always -v $(pwd)/config:/server/config -v $(pwd)/Log:/server/Log --name modelmanager platserver python model_manager/server.py
