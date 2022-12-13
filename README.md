@@ -12,33 +12,35 @@ A pasta get-data contem o script de extração de dados do BigQuery e salva no b
 2. `pip install -r requirements.txt`
 3. `python get_data/update_data_on_gce.py`
 
+***
+
 ## Normalize
 
 Para gerar os dados normalizados para treino basta executar `python normalization/generated_normalize_csv.py`
 
+***
+
 ## VM
 
-Para criar a VM no GCE basta executar `python vm/create_vm.py`. Essa instrução usa o credentials do projeto e o SSH local para fazer copia de arquivos.
-Após isso, logar na VM (pelo painel ou pelo terminal), entrar na pasta do usuário que os arquivos foram copiados (geralmente o usuário SSH que rodou o comando anterior) e executar:
+Para criar a VM no GCE basta executar `python vm/create_vm.py`. Essa instrução usa o credentials do projeto e o SSH local para fazer copia de arquivos e inicializar os dockers.
 
-1. `bash vm/setup_vm.sh`
-2. `sudo bash run_model_manager.sh`
+***
 
 ## Docker
 
-### Buildando os modelos
+### Buildando apenas o modelo fora do model manager
 
 ```bash
 docker build -t <container_name> . --build-arg APP=<model_name(federation_model | cluster_model | classification_model)> --build-arg PORT=<port>
 ```
 
-### Docker Models sem o model manager
+### Servindo um modelo o model manager
 
 ```bash
 docker run -d --name <model_name(federation_model | cluster_model | classification_model)> -e APP=<model_name(federation_model | cluster_model | classification_model)> -e PORT=<port> -p <port>:<port> -t <container_name>
 ```
 
-## Buildando model manager e criando a rede
+### Buildando model manager e criando a rede
 
 ```bash
 docker build -t platserver -f dockerfile.model_manager .
@@ -48,7 +50,7 @@ docker build -t platserver -f dockerfile.model_manager .
 docker network create plat_network
 ```
 
-### Docker Models dentro do model manager
+### Docker Models na rede do model manager
 
 ```bash
 docker run -it --name platserver --network plat_network -p 8080:8080 -v $(pwd)/config:/server/config platserver /bin/bash

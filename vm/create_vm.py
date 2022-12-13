@@ -33,7 +33,8 @@ def create_mv(compute):
         "boot": True,
         "autoDelete": True,
         "initializeParams": {
-          "sourceImage": "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20200529",
+          "sourceImage": "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20221201",
+          "imageSizeGb": "50",
           "diskSizeGb": "50",
           "diskType": "https://www.googleapis.com/compute/v1/projects/{}/zones/us-east1-b/diskTypes/pd-standard".format(project)
         }
@@ -67,7 +68,7 @@ def create_mv(compute):
     vm = compute.zoneOperations().get(
         project=project,
         zone=zone,
-        operation=vm['name']).execute()
+        operation=vm['name']).execute()  
 
   print(vm)
   return vm
@@ -111,6 +112,8 @@ def create_firewall(compute):
   return firewall
 
 def prepare_vm():
+  print('Preparando a VM, aguarde...')
+
   credentials = None
   with open(os.getenv('SERVICE_ACCOUNT_JSON_PATH')) as cred_file:
     credentials = json.load(cred_file)
@@ -119,6 +122,8 @@ def prepare_vm():
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:~/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./vm/setup_vm.sh'"])
   subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./run_model_manager.sh'"])
+  
+  print('VM preparada com sucesso!')
   pass
 
 if __name__ == "__main__":
@@ -133,20 +138,22 @@ if __name__ == "__main__":
   project = 'wallbee-app'
   zone = 'us-central1-a'
 
-  vm = compute.instances().list(
+  vms = compute.instances().list(
     project='wallbee-app',
     zone='us-central1-a').execute()
 
   exists = False
-  if 'items' in vm:
-    for instance in vm['items']:
+  vm_ip = None
+  if 'items' in vms:
+    for instance in vms['items']:
       if instance['name'] != 'model-manager-vm':
         continue
       exists = True
       break
 
   if not exists:
-    create_mv(compute)
+    vm = create_mv(compute)
+    vm_ip = vm['targetLink'].split('/')[-1]
 
   firewall = compute.firewalls().list(
     project='wallbee-app').execute()
@@ -163,5 +170,17 @@ if __name__ == "__main__":
   if not existsFirewall:
     create_firewall(compute)
 
-  prepare_vm()
+  if not exists:
+    prepare_vm()
+
+  vms = compute.instances().list(project='wallbee-app', zone='us-central1-a').execute()
+
+  if 'items' in vms and not vm_ip:
+    for instance in vms['items']:
+      if instance['name'] != 'model-manager-vm':
+        continue
+      vm_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
+      break
+
+  print('Endpoint URL:', 'http://{}:443'.format(vm_ip))
   pass
