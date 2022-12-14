@@ -10,7 +10,16 @@ export default class Footer extends React.Component {
             Criado por{' '}
             <a href="https://github.com/vinimarcili" target="_blank">
               Viní Marcili
-            </a>
+            </a>{' '}
+            |{' '}
+            <a href="https://github.com/fabianamasini" target="_blank">
+              Fabiana
+            </a>{' '}
+            |{' '}
+            <a href="https://github.com/Guilherme-pdz" target="_blank">
+              Guilherme
+            </a>{' '}
+            @ 2022
           </p>
         </div>
       </footer>
