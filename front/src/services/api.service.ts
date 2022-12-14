@@ -6,9 +6,6 @@ export default class ApiService {
   async postPredict(model: 'federation_model' | 'cluster_model' | 'classification_model', data: Data) {
     const response = await fetch(`${this.url}/predict`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
         data,
         model,

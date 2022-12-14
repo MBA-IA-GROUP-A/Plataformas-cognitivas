@@ -2,7 +2,7 @@
   "models": {                                         
     "federation_model": {                                     
       "version": "V01",                               
-      "url": "http://172.20.0.2:8080/predict"          
+      "url": "http://172.18.0.2:8080/predict"          
     },                                                
     "cluster_model": {                                     
       "version": "V01",                               

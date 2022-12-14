@@ -65,6 +65,8 @@ def predict(request = request):
   resp_content = json.loads(resp.content)
   logg_track["output"].update({"content": resp_content, "status_code": resp.status_code, "headers": headers})
   logapp(jsoncontent=logg_track, sufix=reqtime.strftime("%Y%m%d-%H%M%S.%f"))
+  response = make_response(response)
+  response.headers.set('Access-Control-Allow-Origin', '*')
   return response
 
 @app.route('/download', methods=['GET', 'POST'])
@@ -79,6 +81,7 @@ def download():
   response = make_response(fileobj.read())
   response.headers.set('Content-Type', 'zip')
   response.headers.set('Content-Disposition', 'attachment', filename='Logs.zip')
+  response.headers.set('Access-Control-Allow-Origin', '*')
   return response
 
 if __name__ == '__main__':

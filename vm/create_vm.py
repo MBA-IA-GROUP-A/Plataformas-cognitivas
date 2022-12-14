@@ -119,7 +119,23 @@ def prepare_vm():
     credentials = json.load(cred_file)
 
   subprocess.run(["gcloud", "auth", "activate-service-account", credentials["client_email"], "--key-file={}".format(os.getenv('SERVICE_ACCOUNT_JSON_PATH'))])
-  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:~/", "--project", "wallbee-app"])
+  # subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", os.getcwd(), "model-manager-vm:~/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "mkdir -p ~/Plataformas"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'credentials.json', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", '.env', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'dockerfile', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'dockerfile.model_manager', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'generate_config.sh', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'run_model_manager.sh', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'requirements.txt', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'vm', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'normalization', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'get_data', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'tmp', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'config', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'classification_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'explore_data', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'federation_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./vm/setup_vm.sh'"])
   subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./run_model_manager.sh'"])
   
@@ -153,7 +169,6 @@ if __name__ == "__main__":
 
   if not exists:
     vm = create_mv(compute)
-    vm_ip = vm['targetLink'].split('/')[-1]
 
   firewall = compute.firewalls().list(
     project='wallbee-app').execute()
@@ -170,9 +185,6 @@ if __name__ == "__main__":
   if not existsFirewall:
     create_firewall(compute)
 
-  if not exists:
-    prepare_vm()
-
   vms = compute.instances().list(project='wallbee-app', zone='us-central1-a').execute()
 
   if 'items' in vms and not vm_ip:
@@ -181,6 +193,8 @@ if __name__ == "__main__":
         continue
       vm_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
       break
+
+  prepare_vm()
 
   print('Endpoint URL:', 'http://{}:443'.format(vm_ip))
   pass
