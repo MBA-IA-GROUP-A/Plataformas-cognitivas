@@ -16,7 +16,7 @@ jobs:
           node-version: '16'
       - name: Install
         working-directory: ./front
-        run: 'npm install'
+        run: 'npm install --force'
       - name: Lint
         run: npm run lint
         working-directory: ./front
