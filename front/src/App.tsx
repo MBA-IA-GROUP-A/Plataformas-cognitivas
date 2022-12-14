@@ -75,7 +75,7 @@ export default class App extends React.Component<IProps, IState> {
       try {
         this.setState({ loading: true })
         const response = await this.api.postPredict(this.state.model, this.state.data)
-        this.setState({ loading: false, result: response.data })
+        this.setState({ loading: false, result: response.result })
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error)

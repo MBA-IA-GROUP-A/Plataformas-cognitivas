@@ -1,9 +1,11 @@
 from flask import Flask,request, Response, make_response
+from flask_cors import CORS
 import requests
 import pandas
 import sys, os, io, uuid, datetime, json, zipfile
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
