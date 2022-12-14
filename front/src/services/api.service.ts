@@ -1,13 +1,22 @@
 import Data from '@interfaces/data.interface'
 
+// create a enum for data types
+
 export default class ApiService {
   url = process.env.REACT_APP_ENV_API
 
+  prepareData(data: Data) {
+    return Object.entries(data).map(([key, value]) => {
+      return value
+    })
+  }
+
   async postPredict(model: 'federation_model' | 'cluster_model' | 'classification_model', data: Data) {
+    const preparedData = this.prepareData(data)
     const response = await fetch(`${this.url}/predict`, {
       method: 'POST',
       body: JSON.stringify({
-        data,
+        data: [preparedData],
         model,
       }),
     })
