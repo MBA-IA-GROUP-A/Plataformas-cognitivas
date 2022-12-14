@@ -1,22 +1,17 @@
-import '@/App.scoped.scss'
-import './App.scss'
+import React from 'react'
 import logo from './logo.svg'
+import './App.scoped.scss'
+import Footer from '@components/footer/footer.component'
+import Header from '@components/header/header.component'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        {process.env.REACT_APP_ENV_NAME}
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
-  )
+export default class App extends React.Component {
+  render() {
+    return (
+      <div className="app">
+        <Header />
+        <main>{process.env.REACT_APP_ENV_NAME}</main>
+        <Footer />
+      </div>
+    )
+  }
 }
-
-export default App
