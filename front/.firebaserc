@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "wallbee-app"
+  },
+  "targets": {
+    "squid-apis": {
+      "hosting": {
+        "prediction-ia": [
+          "prediction-ia"
+        ]
+      }
+    }
   }
 }

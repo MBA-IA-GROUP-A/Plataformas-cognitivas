@@ -27,3 +27,4 @@ jobs:
           entryPoint: ./front
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WALLBEE_APP }}'
           projectId: wallbee-app
+          target: prediction-ia
