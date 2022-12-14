@@ -3,7 +3,7 @@ import Data from '@interfaces/data.interface'
 export default class ApiService {
   url = process.env.REACT_APP_ENV_API
 
-  async postPredict(model: 'federation_model' | 'cluster_model' | 'classification_model', data: Array<Array<Data>>) {
+  async postPredict(model: 'federation_model' | 'cluster_model' | 'classification_model', data: Data) {
     const response = await fetch(`${this.url}/predict`, {
       method: 'POST',
       headers: {
