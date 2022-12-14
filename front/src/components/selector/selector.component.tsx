@@ -20,6 +20,7 @@ interface SelectorProps extends React.HTMLAttributes<HTMLDivElement> {
   hideInput?: boolean
   labelFontSize?: string
   wrapperClass?: string
+  labelWidth?: string
   boxBgSecondary?: boolean
   onChange?: (event: any) => any
   onEmitValue?: (value: any) => any
@@ -54,6 +55,7 @@ export default ({
   wrapperClass = '',
   labelFontSize = '1rem',
   title = '',
+  labelWidth = 'initial',
   style,
 }: SelectorProps) => {
   const timestamp = `random-id-${(1 + Date.now() + Math.random()).toString().replace('.', '')}`
@@ -107,7 +109,7 @@ export default ({
           <label
             className={'mr-2 label ' + `${readOnly ? 'readonly ' : ''}` + `${externalError || state.error ? 'error ' : ''}`}
             htmlFor={id || timestamp}
-            style={{ fontSize: labelFontSize }}
+            style={{ fontSize: labelFontSize, width: labelWidth }}
           >
             {leftLabel}
           </label>
@@ -132,7 +134,7 @@ export default ({
           <label
             className={'label ' + `${readOnly ? 'readonly ' : ''}` + `${externalError || state.error ? 'error ' : ''}`}
             htmlFor={id || timestamp}
-            style={{ fontSize: labelFontSize }}
+            style={{ fontSize: labelFontSize, width: labelWidth }}
           >
             {rightLabel}
           </label>

@@ -1,5 +1,5 @@
 import Loader from '@components/loader/loader.component'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import './select.component.scoped.scss'
 import './select.component.scss'
 
@@ -59,32 +59,35 @@ export default ({
     error: '',
   })
 
+  const handleChange = useCallback(
+    (event: any) => {
+      state.value = event?.target?.value || (event?.length ? event : '')
+      if (externalError) {
+        state.error = ''
+      } else if (!!required && (!state.value || state.value.length < 1) && state.value !== 0) {
+        state.error = 'Campo obrigatório'
+      } else {
+        state.error = ''
+      }
+
+      setState({ ...state })
+
+      if (onValidate && typeof onValidate === 'function') {
+        onValidate(!state.error && !externalError)
+      }
+      if (onChange && typeof onChange === 'function') {
+        onChange(state.value)
+      }
+    },
+    [externalError, onChange, onValidate, required, state]
+  )
+
   useEffect(() => {
     if (state.value !== value) {
       handleChange(value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, state])
-
-  const handleChange = (event: any) => {
-    state.value = event?.target?.value || (event?.length ? event : '')
-    if (externalError) {
-      state.error = ''
-    } else if (!!required && (!state.value || state.value.length < 1) && state.value !== 0) {
-      state.error = 'Campo obrigatório'
-    } else {
-      state.error = ''
-    }
-
-    setState({ ...state })
-
-    if (onValidate && typeof onValidate === 'function') {
-      onValidate(!state.error && !externalError)
-    }
-    if (onChange && typeof onChange === 'function') {
-      onChange(state.value)
-    }
-  }
+  }, [value])
 
   return (
     <div className={`wrapper-all-inside-input ${className}`}>

@@ -50,4 +50,5 @@ export default interface Data {
   Region_Central: number // Região Central 48
   Region_South: number // Região Sul 49
   'Region_North-East': number // Região Nordeste 50
+  [param: string]: number
 }

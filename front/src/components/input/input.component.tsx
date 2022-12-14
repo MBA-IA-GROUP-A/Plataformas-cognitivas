@@ -1,6 +1,6 @@
 import Loader from '@components/loader/loader.component'
 import ValidatorHelper from '@helpers/validator.helper'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import './input.component.scoped.scss'
 import './input.component.scss'
 
@@ -99,7 +99,7 @@ export default ({
       handleChange(value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, state.value])
+  }, [value])
 
   useEffect(() => {
     return () => {
@@ -107,42 +107,45 @@ export default ({
     }
   }, [timer])
 
-  const handleChange = (event: any) => {
-    state.value = event?.target?.value || (event?.length ? event : '')
-    if (externalError) {
-      state.error = ''
-    } else if (!!required && (!state.value || state.value.length < 1) && state.value !== 0) {
-      state.error = 'Campo obrigatório'
-    } else if (type === 'email' && !validatorHelper.email(state.value)) {
-      state.error = 'E-mail inválido'
-    } else if (type === 'tel' && !validatorHelper.phone(state.value)) {
-      state.error = 'Telefone inválido'
-    } else if (type === 'url' && state.value && state.value.length && !validatorHelper.url(state.value)) {
-      state.error = 'URL inválida'
-    } else {
-      state.error = ''
-    }
-
-    setState({ ...state })
-
-    if (onValidate && typeof onValidate === 'function') {
-      onValidate(!state.error && !externalError)
-    }
-    if (onChange && typeof onChange === 'function') {
-      onChange(state.value)
-    }
-    if (onTimeout && typeof onTimeout === 'function') {
-      onTimeout(false)
-      if (timer) {
-        clearTimeout(timer)
+  const handleChange = useCallback(
+    (event: any) => {
+      state.value = event?.target?.value || (event?.length ? event : '')
+      if (externalError) {
+        state.error = ''
+      } else if (!!required && (!state.value || state.value.length < 1) && state.value !== 0) {
+        state.error = 'Campo obrigatório'
+      } else if (type === 'email' && !validatorHelper.email(state.value)) {
+        state.error = 'E-mail inválido'
+      } else if (type === 'tel' && !validatorHelper.phone(state.value)) {
+        state.error = 'Telefone inválido'
+      } else if (type === 'url' && state.value && state.value.length && !validatorHelper.url(state.value)) {
+        state.error = 'URL inválida'
+      } else {
+        state.error = ''
       }
-      setTimer(
-        setTimeout(() => {
-          onTimeout(true)
-        }, DELAY_TIME_FOR_TYPING_PAUSE)
-      )
-    }
-  }
+
+      setState({ ...state })
+
+      if (onValidate && typeof onValidate === 'function') {
+        onValidate(!state.error && !externalError)
+      }
+      if (onChange && typeof onChange === 'function') {
+        onChange(state.value)
+      }
+      if (onTimeout && typeof onTimeout === 'function') {
+        onTimeout(false)
+        if (timer) {
+          clearTimeout(timer)
+        }
+        setTimer(
+          setTimeout(() => {
+            onTimeout(true)
+          }, DELAY_TIME_FOR_TYPING_PAUSE)
+        )
+      }
+    },
+    [state, externalError, required, type, validatorHelper, onValidate, onChange, onTimeout, timer]
+  )
 
   return (
     <div className={`wrapper-all-inside-input ${className}`}>
