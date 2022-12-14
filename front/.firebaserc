@@ -3,7 +3,7 @@
     "default": "wallbee-app"
   },
   "targets": {
-    "squid-apis": {
+    "wallbee-app": {
       "hosting": {
         "prediction-ia": [
           "prediction-ia"
