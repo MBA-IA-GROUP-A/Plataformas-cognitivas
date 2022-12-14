@@ -67,3 +67,7 @@ docker run -d --network plat_network -p 1000<number>:8080 --restart always --nam
 ```bash
 docker run -d --network plat_network -p 443:8080 --restart always -v $(pwd)/config:/server/config -v $(pwd)/Log:/server/Log --name modelmanager platserver python model_manager/server.py 
 ```
+
+## Front
+
+[Clique aqui para acessar a documentação do front-end](https://github.com/MBA-IA-GROUP-A/Plataformas-cognitivas/front/README.md)
