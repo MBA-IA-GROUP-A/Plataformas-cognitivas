@@ -12,12 +12,14 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - run: cd front
       - name: Install
+        working-directory: ./front
         run: 'npm install'
       - name: Lint
+        working-directory: ./front
         run: npm run lint
       - name: Build
+        working-directory: ./front
         run: 'npm run build:production'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
