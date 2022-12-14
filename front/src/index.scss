@@ -1,2 +1,8 @@
 $fontsFolderPath: '~@squidit/css/dist/fonts';
 @import '@squidit/css/src/scss/squid.scss';
+
+:root {
+  --primary_color: var(--green, #299C39);
+  --secondary_color: var(--white-html, #ffffff);
+  --tertiary_color: var(--green_dark, #0e3714);
+}

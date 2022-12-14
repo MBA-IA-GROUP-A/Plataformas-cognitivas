@@ -5,12 +5,14 @@ export default class Footer extends React.Component {
   render() {
     return (
       <footer>
-        <p>
-          Criado por{' '}
-          <a href="https://github.com/vinimarcili" target="_blank">
-            Viní Marcili
-          </a>
-        </p>
+        <div className="container">
+          <p>
+            Criado por{' '}
+            <a href="https://github.com/vinimarcili" target="_blank">
+              Viní Marcili
+            </a>
+          </p>
+        </div>
       </footer>
     )
   }

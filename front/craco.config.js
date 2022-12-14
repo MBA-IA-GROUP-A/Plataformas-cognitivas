@@ -12,6 +12,7 @@ module.exports = {
       '@components': path.resolve(__dirname, 'src/components'),
       '@helpers': path.resolve(__dirname, 'src/helpers'),
       '@services': path.resolve(__dirname, 'src/services'),
+      '@interfaces': path.resolve(__dirname, 'src/interfaces'),
     },
   },
 }
