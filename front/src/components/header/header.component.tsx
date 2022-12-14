@@ -7,7 +7,7 @@ export default class Header extends React.Component {
     return (
       <header>
         <div className="container">
-          <h1>Análise de crédito</h1>
+          <h1>Análise de inadimplência</h1>
           <ToggleThemeComponent />
         </div>
       </header>

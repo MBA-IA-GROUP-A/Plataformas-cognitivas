@@ -11,7 +11,7 @@ export default interface Data {
   Neg_ammortization: number // Amortização negativa 9
   interest_only: number // Somente juros 10
   lump_sum_payment: number // Pagamento de montante fixo 11
-  property_value: number // is number // Valor do imóvel de garantia de empréstimo 12
+  property_value: number // is number Valor do imóvel de garantia de empréstimo 12
   construction_type: number // Casa manufaturada 13
   Secured_by: number // Segurado por Casa ou Terra 14
   total_units: number // is number Número de quartos do imovel 15
