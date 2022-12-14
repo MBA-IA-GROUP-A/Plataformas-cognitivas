@@ -7,6 +7,7 @@ import Selector from '@components/selector/selector.component'
 import FormData from '@components/form-data/form-data.component'
 import Data from '@interfaces/data.interface'
 import ApiService from '@services/api.service'
+import ToastHelper from '@helpers/toast.helper'
 import React from 'react'
 import './App.scoped.scss'
 
@@ -51,6 +52,8 @@ export default class App extends React.Component<IProps, IState> {
 
   api = new ApiService()
 
+  toast = new ToastHelper().toast
+
   constructor(props: IProps) {
     super(props)
 
@@ -68,10 +71,25 @@ export default class App extends React.Component<IProps, IState> {
 
   handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    this.setState({ loading: true })
     if (!this.state.loading) {
-      const response = await this.api.postPredict(this.state.model, this.state.data)
-      this.setState({ loading: false, result: response.data })
+      try {
+        this.setState({ loading: true })
+        const response = await this.api.postPredict(this.state.model, this.state.data)
+        this.setState({ loading: false, result: response.data })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+        this.toast.error('Alguma coisa deu errado! Tente novamente mais tarde', {
+          closeButton: true,
+          className: 'full text-bold',
+          position: `${window.innerWidth > 991 ? 'top' : 'bottom'} center`,
+          duration: 3600000,
+          notOverClick: true,
+          immediately: true,
+        })
+      } finally {
+        this.setState({ loading: false })
+      }
     }
   }
 
@@ -142,6 +160,18 @@ export default class App extends React.Component<IProps, IState> {
                 <div className="row">
                   <div className="col-24">
                     <h4>Resultado</h4>
+                    {(this.state.model === 'federation_model' || this.state.model === 'classification_model') && (
+                      <p>
+                        <strong>Probabilidade de inadimplência: </strong>
+                        {this.state.result === 0 ? 'Não' : 'Sim'}
+                      </p>
+                    )}
+                    {this.state.model === 'cluster_model' && (
+                      <p>
+                        <strong>Cluster: </strong>
+                        {this.state.result}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
