@@ -1,12 +1,9 @@
-import Button from '@components/button/button.component'
-import Footer from '@components/footer/footer.component'
-import Header from '@components/header/header.component'
-import Select from '@components/select/select.component'
 import Input from '@components/input/input.component'
-import Data from '@interfaces/data.interface'
-import React from 'react'
+import Select from '@components/select/select.component'
 import Selector from '@components/selector/selector.component'
+import Data from '@interfaces/data.interface'
 import { isEqual } from 'lodash'
+import React from 'react'
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   data: Data
@@ -29,30 +26,86 @@ interface IState {
 }
 
 export default class FormData extends React.Component<IProps, IState> {
+  // Inadimplente
+  // initialData: Data = {
+  //   loan_limit: 1,
+  //   approv_in_adv: 0,
+  //   Credit_Worthiness: 0,
+  //   open_credit: 0,
+  //   business_or_commercial: 0,
+  //   loan_amount: 676500,
+  //   rate_of_interest: 3.5,
+  //   Upfront_charges: 0,
+  //   term: 360,
+  //   Neg_ammortization: 0,
+  //   interest_only: 0,
+  //   lump_sum_payment: 0,
+  //   property_value: 1408000,
+  //   construction_type: 0,
+  //   Secured_by: 1,
+  //   total_units: 1,
+  //   income: 9000,
+  //   Credit_Score: 800,
+  //   co_applicant_credit_type: 0,
+  //   submission_of_application: 0,
+  //   LTV: 0,
+  //   Security_Type: 1,
+  //   dtir1: 40,
+  //   GenderMale: 0,
+  //   GenderFemale: 0,
+  //   GenderJoint: 0,
+  //   loan_type1: 1,
+  //   loan_type2: 0,
+  //   loan_type3: 0,
+  //   loan_purpose_p1: 1,
+  //   loan_purpose_p2: 0,
+  //   loan_purpose_p3: 0,
+  //   loan_purpose_p4: 0,
+  //   occupancy_type_pr: 1,
+  //   occupancy_type_ir: 0,
+  //   occupancy_type_sr: 0,
+  //   credit_type_equi: 0,
+  //   credit_type_crif: 0,
+  //   credit_type_cib: 0,
+  //   credit_type_exp: 0,
+  //   'age_<25': 0,
+  //   'age_25-34': 0,
+  //   'age_35-44': 0,
+  //   'age_45-54': 0,
+  //   'age_55-64': 0,
+  //   'age_65-74': 0,
+  //   'age_>74': 0,
+  //   Region_North: 0,
+  //   Region_Central: 0,
+  //   Region_South: 0,
+  //   'Region_North-East': 0,
+  // }
+
+  // Não inadimplente
   initialData: Data = {
     loan_limit: 1,
     approv_in_adv: 0,
-    Credit_Worthiness: 0,
+    Credit_Worthiness: 1,
     open_credit: 0,
     business_or_commercial: 0,
-    loan_amount: 676500,
-    rate_of_interest: 3.5,
-    Upfront_charges: 0,
+    loan_amount: 56500,
+    rate_of_interest: 4.75,
+    Upfront_charges: 2420,
     term: 360,
     Neg_ammortization: 0,
     interest_only: 0,
     lump_sum_payment: 0,
-    property_value: 1408000,
+    property_value: 128000,
     construction_type: 0,
     Secured_by: 1,
     total_units: 1,
-    income: 9000,
-    Credit_Score: 800,
+    income: 7140,
+    Credit_Score: 617,
     co_applicant_credit_type: 0,
     submission_of_application: 0,
-    LTV: 0,
+    LTV: 44140625,
     Security_Type: 1,
-    dtir1: 40,
+    dtir1: 42,
     GenderMale: 0,
     GenderFemale: 0,
     GenderJoint: 0,
@@ -63,7 +116,7 @@ export default class FormData extends React.Component<IProps, IState> {
     loan_purpose_p2: 0,
     loan_purpose_p3: 0,
     loan_purpose_p4: 0,
-    occupancy_type_pr: 1,
+    occupancy_type_pr: 0,
     occupancy_type_ir: 0,
     occupancy_type_sr: 0,
     credit_type_equi: 0,
@@ -82,6 +135,8 @@ export default class FormData extends React.Component<IProps, IState> {
     Region_South: 0,
     'Region_North-East': 0,
   }
+
+  // Valores zerados
   // initialData: Data = {
   //   loan_limit: 0,
   //   approv_in_adv: 0,

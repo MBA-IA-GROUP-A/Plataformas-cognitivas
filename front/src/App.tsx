@@ -164,7 +164,8 @@ export default class App extends React.Component<IProps, IState> {
                     {(this.state.model === 'federation_model' || this.state.model === 'classification_model') && (
                       <p>
                         <strong>Probabilidade de inadimplência: </strong>
-                        {(this.state.result * 100).toFixed(2)}%
+                        {/* {(this.state.result * 100).toFixed(2)}% */}
+                        {this.state.result === 0 ? 'Não' : 'Sim'}
                       </p>
                     )}
                     {this.state.model === 'cluster_model' && (
