@@ -6,8 +6,8 @@ export default class ApiService {
   url = process.env.REACT_APP_ENV_API
 
   prepareData(data: Data) {
-    return Object.entries(data).map(([key, value]) => {
-      return value
+    return Object.entries(data).map(([key, value]: any) => {
+      return parseFloat(value)
     })
   }
 
