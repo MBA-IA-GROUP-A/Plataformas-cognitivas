@@ -1,13 +1,11 @@
 import Button from '@components/button/button.component'
 import Footer from '@components/footer/footer.component'
+import FormData from '@components/form-data/form-data.component'
 import Header from '@components/header/header.component'
 import Select from '@components/select/select.component'
-import Input from '@components/input/input.component'
-import Selector from '@components/selector/selector.component'
-import FormData from '@components/form-data/form-data.component'
+import ToastHelper from '@helpers/toast.helper'
 import Data from '@interfaces/data.interface'
 import ApiService from '@services/api.service'
-import ToastHelper from '@helpers/toast.helper'
 import React from 'react'
 import './App.scoped.scss'
 
@@ -25,7 +23,7 @@ export default class App extends React.Component<IProps, IState> {
   models = [
     {
       name: 'federation_model',
-      label: 'Federated Learning (Python)',
+      label: 'Neural Network (Python)',
     },
     {
       name: 'cluster_model',
