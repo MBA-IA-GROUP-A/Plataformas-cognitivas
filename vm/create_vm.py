@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
   vms = compute.instances().list(project='wallbee-app', zone='us-central1-a').execute()
 
-  if 'items' in vms and not vm_ip:
+  if 'items' in vms:
     for instance in vms['items']:
       if instance['name'] != 'model-manager-vm':
         continue
