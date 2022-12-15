@@ -6,6 +6,8 @@ export default class ApiService {
   url = process.env.REACT_APP_ENV_API
 
   prepareData(data: Data) {
+    // eslint-disable-next-line
+    console.log(data)
     return Object.entries(data).map(([key, value]: any) => {
       return parseFloat(value)
     })
@@ -13,7 +15,6 @@ export default class ApiService {
 
   async postPredict(model: 'federation_model' | 'cluster_model' | 'classification_model', data: Data) {
     const preparedData = this.prepareData(data)
-    await fetch(`${this.url}`)
     const response = await fetch(`${this.url}/predict`, {
       method: 'POST',
       headers: {
