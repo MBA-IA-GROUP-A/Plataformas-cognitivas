@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "wallbee-app"
+  },
+  "targets": {
+    "wallbee-app": {
+      "hosting": {
+        "prediction-ia": [
+          "prediction-ia"
+        ]
+      }
+    }
+  }
+}

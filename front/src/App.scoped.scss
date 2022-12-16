@@ -1,0 +1,9 @@
+.app {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+main {
+  min-height: calc(100vh - 50px - 26px);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}

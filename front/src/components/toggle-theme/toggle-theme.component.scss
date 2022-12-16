@@ -1,0 +1,20 @@
+.theme-selector {
+  .wrapper-selectors {
+    align-items: center;
+  }
+  .wrapper-selectors input + label.checkbox {
+    height: 14px;
+    width: 26px;
+    margin: 0;
+    &::after {
+      height: 8px;
+      width: 8px;
+    }
+  }
+  .wrapper-selectors.toggle .label {
+    line-height: 1.1;
+  }
+  .wrapper-selectors.toggle input:checked + label.checkbox::after {
+    left: 14px;
+  }
+}

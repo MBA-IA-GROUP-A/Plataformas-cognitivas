@@ -1,0 +1,21 @@
+FROM python:3.9
+
+RUN apt-get update
+RUN apt-get install nano
+
+RUN mkdir -p /server
+RUN mkdir -p /logs
+
+COPY . /server
+
+WORKDIR /server
+
+RUN pip install --upgrade pip
+RUN pip install -r /server/requirements.txt
+
+VOLUME /server/config
+VOLUME /logs
+
+EXPOSE 80
+EXPOSE 8080
+EXPOSE 443

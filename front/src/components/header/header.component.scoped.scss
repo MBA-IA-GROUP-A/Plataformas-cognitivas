@@ -1,0 +1,21 @@
+header {
+  width: 100%;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  width: 100vw;
+  background-color: var(--background_secondary);
+  box-shadow: var(--box_shadow);
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px solid var(--background);
+  .container {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+  }
+  h1 {
+    margin: 0;
+  }
+}
