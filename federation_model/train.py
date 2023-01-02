@@ -8,10 +8,10 @@ import sys
 import uuid
 import os
 from azureml.core.authentication import InteractiveLoginAuthentication
-sys.path.append('normalization')
-from normalization import NormalizedData
+import os
+sys.path.append(os.getcwd())
+from normalization.normalization import NormalizedData
 from azureml.core import Workspace, Experiment
-import glob
 
 load_dotenv('.env')
 

@@ -1,9 +1,8 @@
 import pandas as pd
 import sys
 import os
-sys.path.append('get_data')
-from get_data import get_data
-
+sys.path.append(os.getcwd())
+from get_data.get_data import GetData
 class NormalizedData():
   boolean_fields = [
     {
@@ -87,7 +86,8 @@ class NormalizedData():
     pathToData = 'tmp/data/data.csv'
     if (os.path.exists(pathToData) == False):
       print('Data not found, downloading...')
-      self.get_data = get_data()
+      self.get_data = GetData()
+      # self.get_data = get_data()
 
       if not os.path.exists('tmp/data'):
         os.makedirs('tmp/data')
