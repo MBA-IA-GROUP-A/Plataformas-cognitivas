@@ -1,4 +1,7 @@
-data = read.csv('loan_default_normalized.csv')
+setwd('C:/Users/Usuario/Documents/GitHub/Plataformas-cognitivas/r_model')
+
+
+data = read.csv('data_normalized.csv')
 
 summary(data)
 
@@ -37,6 +40,11 @@ boxplot(table(data$Secured_by), main = 'Secured_by')
 boxplot(table(data$total_units), main = 'total_units')
 
 
+# Checking the distribution of the target
+hist(data$dtir1)
+
+
+
 
 
 #     Linear Regression
@@ -53,21 +61,15 @@ colnames(data)
 # property_value +
 # LTV +
 
-lm.r = lm(formula = dtir1 ~ loan_limit + approv_in_adv + Credit_Worthiness + open_credit + business_or_commercial +
-          loan_amount + term + Neg_ammortization + interest_only + lump_sum_payment +
-           construction_type + Secured_by + total_units + income + Credit_Score + co_applicant_credit_type +
-          submission_of_application +  Security_Type + Status + GenderMale + GenderFemale + GenderJoint + loantype1 +
-          loantype2 + loantype3 + loanpurpose_p1 + loanpurpose_p2 + loanpurpose_p3 + loanpurpose_p4 + occupancytype_pr +
-          occupancytype_ir + occupancytype_sr + credittype_equi + credittype_crif + credittype_cib + credittype_exp +
-          age_.25 + age_25.34 + age_35.44 + age_45.54 + age_55.64 + age_65.74 + age_.74 + RNorth + RCentral + RSouth +
-          RNorth_East,
-          data = trainingset)
+lm.r = lm(formula = dtir1 ~., trainingset)
+
   
 coef(lm.r)
 
 #Predicting test set results
 ypred = predict(lm.r, newdata = testset)
 
+ypred
 
 #Training results plots
 ggplot() + geom_point(aes(x = trainingset$loan_limit,
