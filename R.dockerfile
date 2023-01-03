@@ -6,10 +6,16 @@ WORKDIR /app
 
 COPY . /app
 
-RUN Rscript r_model/install.R
+RUN apt-get update -qq && apt-get install -y \
+  libssl-dev \
+  libcurl4-gnutls-dev \
+  libxml2-dev
+
+RUN R -e "source('r_model/install.R')
 
 ARG PORT=8080
 
 EXPOSE $PORT
 
-CMD Rscript r_model/server.R $PORT; \
+# CMD Rscript r_model/server.R $PORT; \
+ENTRYPOINT ["R", "-e", "source('r_model/model.R')"]
