@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN apt-get update -qq && apt-get install -y \
+RUN apt-get install -y \
   libssl-dev \
   libsodium-dev \
   libcurl4-openssl-dev \
@@ -14,10 +14,9 @@ RUN apt-get update -qq && apt-get install -y \
 
 RUN R -e "source('r_model/requirements.R')"
 
-ARG PORT=8000
+ARG PORT=8080
 
 EXPOSE $PORT
 
-# CMD Rscript r_model/server.R $PORT; \
-# ENTRYPOINT ["R", "-e", "source('r_model/server.R')"]
-ENTRYPOINT ["Rscript", "r_model/server.R"]
+# ENTRYPOINT ["R", "-e", "source('r_model/server.R'); library(plumber); pb <- pr('r_model/plumber.R'); pr_run(port=${PORT}, host='0.0.0.0', pr=pb)"]
+CMD R -e "source('r_model/server.R'); library(plumber); pb <- pr('r_model/plumber.R'); pr_run(port=${PORT}, host='0.0.0.0', pr=pb)"

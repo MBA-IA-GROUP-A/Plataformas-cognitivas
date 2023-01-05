@@ -3,7 +3,7 @@ library(plumber)
 
 # setwd('C:/Users/Usuario/Documents/GitHub/Plataformas-cognitivas')
 # Carregamento do modelo para um objeto
-modelo = readRDS("./tmp/models/Rmodel.rds")
+modelo = readRDS("../tmp/models/Rmodel.rds")
 
 #* @apiTitle R Regression Model
 
