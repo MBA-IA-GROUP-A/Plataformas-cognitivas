@@ -31,13 +31,13 @@ Para criar a VM no GCE basta executar `python vm/create_vm.py`. Essa instrução
 ### Buildando apenas o modelo fora do model manager
 
 ```bash
-docker build -t <container_name> . --build-arg APP=<model_name(federation_model | cluster_model | classification_model)> --build-arg PORT=<port>
+docker build -t <container_name> . --build-arg APP=<model_name(federation_model | cluster_model | r_model)> --build-arg PORT=<port>
 ```
 
 ### Servindo um modelo o model manager
 
 ```bash
-docker run -d --name <model_name(federation_model | cluster_model | classification_model)> -e APP=<model_name(federation_model | cluster_model | classification_model)> -e PORT=<port> -p <port>:<port> -t <container_name>
+docker run -d --name <model_name(federation_model | cluster_model | r_model)> -e APP=<model_name(federation_model | cluster_model | r_model)> -e PORT=<port> -p <port>:<port> -t <container_name>
 ```
 
 ### Buildando model manager e criando a rede
@@ -59,7 +59,7 @@ docker run -it --name platserver --network plat_network -p 8080:8080 -v $(pwd)/c
 #### Servindo os modelos
 
 ```bash
-docker run -d --network plat_network -p 1000<number>:8080 --restart always --name <model_name(federation_model | cluster_model | classification_model)> platserver python <model_name(federation_model | cluster_model | classification_model)>/server.py 8080
+docker run -d --network plat_network -p 1000<number>:8080 --restart always --name <model_name(federation_model | cluster_model | r_model)> platserver python <model_name(federation_model | cluster_model | r_model)>/server.py 8080
 ```
 
 #### Subindo model manager

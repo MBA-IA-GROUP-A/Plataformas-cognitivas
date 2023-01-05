@@ -1,16 +1,16 @@
-{                                                     
-  "models": {                                         
-    "federation_model": {                                     
-      "version": "V01",                               
-      "url": "http://172.18.0.2:8080/predict"          
-    },                                                
-    "cluster_model": {                                     
-      "version": "V01",                               
-      "url": "http://:8080/predict"          
-    },                                                
-    "classification_model": {                                     
-      "version": "V01",                               
-      "url": "http://:8080/predict"          
-    }                                                 
-  }                                                   
-}                                                     
+{
+  "models": {
+    "federation_model": {
+      "version": "V01",
+      "url": "http://172.18.0.2:8080/predict"
+    },
+    "cluster_model": {
+      "version": "V01",
+      "url": "http://:8080/predict"
+    },
+    "r_model": {
+      "version": "V01",
+      "url": "http://:8080/predict"
+    }
+  }
+}

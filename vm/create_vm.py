@@ -134,7 +134,7 @@ def prepare_vm():
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'get_data', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'tmp', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'config', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
-  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'classification_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'r_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'cluster_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'explore_data', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'federation_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])

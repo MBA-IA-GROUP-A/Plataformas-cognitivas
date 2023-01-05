@@ -12,7 +12,7 @@ import './App.scoped.scss'
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface IState {
-  model: 'federation_model' | 'cluster_model' | 'classification_model'
+  model: 'federation_model' | 'cluster_model' | 'r_model'
   data: Data
   loading: boolean
   valid: boolean
@@ -30,7 +30,7 @@ export default class App extends React.Component<IProps, IState> {
       label: 'Cluster (Python)',
     },
     {
-      name: 'classification_model',
+      name: 'r_model',
       label: 'Classification (R)',
     },
   ]
@@ -161,7 +161,7 @@ export default class App extends React.Component<IProps, IState> {
                 <div className="row">
                   <div className="col-24">
                     <h4>Resultado</h4>
-                    {(this.state.model === 'federation_model' || this.state.model === 'classification_model') && (
+                    {(this.state.model === 'federation_model' || this.state.model === 'r_model') && (
                       <p>
                         <strong>Probabilidade de inadimplência: </strong>
                         {/* {(this.state.result * 100).toFixed(2)}% */}

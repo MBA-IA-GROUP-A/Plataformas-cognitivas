@@ -13,7 +13,7 @@ export default class ApiService {
     })
   }
 
-  async postPredict(model: 'federation_model' | 'cluster_model' | 'classification_model', data: Data) {
+  async postPredict(model: 'federation_model' | 'cluster_model' | 'r_model', data: Data) {
     const preparedData = this.prepareData(data)
     const response = await fetch(`${this.url}/predict`, {
       method: 'POST',
