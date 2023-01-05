@@ -15,9 +15,9 @@ RUN apt-get update -qq && apt-get install -y \
 
 RUN R -e "source('r_model/install.R')
 
-ARG PORT=8080
+ARG PORT=8000
 
 EXPOSE $PORT
 
 # CMD Rscript r_model/server.R $PORT; \
-ENTRYPOINT ["R", "-e", "source('r_model/model.R')"]
+ENTRYPOINT ["R", "-e", "source('r_model/server.R')"]
