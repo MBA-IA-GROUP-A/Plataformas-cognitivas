@@ -2,7 +2,7 @@
 getwd()
 
 
-setwd('C:/Users/Usuario/Documents/GitHub/Plataformas-cognitivas/r_model')
+# setwd('C:/Users/Usuario/Documents/GitHub/Plataformas-cognitivas/r_model')
 
 # Libraries
 
