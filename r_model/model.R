@@ -49,7 +49,8 @@ ggplot() + geom_point(aes(x = testset$loan_limit,
 
 #Saving the model
 
-saveRDS(lm.r, file = "tmp/models/Rmodel.rda")
+save(lm.r, file = "tmp/models/Rmodel.RData")
+saveRDS(lm.r, file = "tmp/models/Rmodel.rds")
 
 #Loading the model (testing)
 
