@@ -15,7 +15,7 @@ export default class ToastHelper {
   }
 
   constructor() {
-    this.toast = Toast
+    this.toast = window as any['Toast']
   }
 
   toastLogSrr(message: string, config: toastConfig) {
