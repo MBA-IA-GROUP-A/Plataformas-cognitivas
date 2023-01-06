@@ -4,8 +4,8 @@ docker build -t federation_model .
 echo "build r_model"
 docker build -t r_model -f R.dockerfile .
 
-echo "build platserver"
-docker build -t platserver -f dockerfile.model_manager .
+echo "build modelmanager"
+docker build -t modelmanager -f dockerfile.model_manager .
 
 echo "create plat_network"
 docker network create plat_network
@@ -20,4 +20,4 @@ echo "generate config"
 bash generate_config.sh
 
 echo "run modelmanager"
-docker run -d --network plat_network -p 443:8080 --restart always -v $(pwd)/config:/server/config -v $(pwd)/Log:/server/Log --name modelmanager platserver python model_manager/server.py
+docker run -d --network plat_network -p 443:8080 --restart always -v $(pwd)/config:/server/config -v $(pwd)/Log:/server/Log --name modelmanager modelmanager python model_manager/server.py
