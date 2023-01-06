@@ -1,6 +1,9 @@
 echo "build federation_model"
 docker build -t federation_model .
 
+echo "build r_model"
+docker build -t r_model -f R.dockerfile .
+
 echo "build platserver"
 docker build -t platserver -f dockerfile.model_manager .
 
@@ -8,7 +11,10 @@ echo "create plat_network"
 docker network create plat_network
 
 echo "run federation_model"
-docker run -d --network plat_network -p 10001:8080 --restart always --name federation_model platserver python federation_model/server.py 8080
+docker run -d --network plat_network -p 10001:8080 --restart always --name federation_model federation_model python federation_model/server.py 8080
+
+echo "run r_model"
+docker run -d --network plat_network -p 10002:8080 --restart always --name r_model r_model R -e "source('r_model/server.R'); library(plumber); pb <- pr('r_model/plumber.R'); pr_run(port=8080, host='0.0.0.0', pr=pb)"
 
 echo "generate config"
 bash generate_config.sh

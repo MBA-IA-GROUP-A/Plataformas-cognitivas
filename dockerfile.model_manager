@@ -1,6 +1,7 @@
 FROM python:3.9
 
 RUN apt-get update
+RUN apt-get install -y r-base
 RUN apt-get install nano
 
 RUN mkdir -p /server
@@ -10,6 +11,7 @@ COPY . /server
 
 WORKDIR /server
 
+RUN R -e "source('r_model/requirements.R')"
 RUN pip install --upgrade pip
 RUN pip install -r /server/requirements.txt
 

@@ -58,7 +58,7 @@ def predict(request = request):
   json_content = try_or(lambda: request.get_json(), {})
   logg_track["input"]["content"] = json_content
   if request.method=='POST':
-    resp = requests.post(url=mymodel_url, json=json_content['data'])
+    resp = requests.post(url=mymodel_url, json=json_content)
   else:
     raise Exception("Method not allowed.")
   print('Request done')

@@ -124,6 +124,7 @@ def prepare_vm():
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'credentials.json', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", '.env', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'dockerfile', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
+  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'R.dockerfile', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'dockerfile.model_manager', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'generate_config.sh', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", 'run_model_manager.sh', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
