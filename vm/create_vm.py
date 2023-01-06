@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import subprocess
 import json
+import time
 
 load_dotenv('.env')
 
@@ -197,6 +198,7 @@ if __name__ == "__main__":
       vm_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
       break
 
+  time.sleep(10)
   prepare_vm()
 
   print('Endpoint URL:', 'http://{}:443'.format(vm_ip))

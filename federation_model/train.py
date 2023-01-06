@@ -15,12 +15,12 @@ from azureml.core import Workspace, Experiment
 
 load_dotenv('.env')
 
-# subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
-# resource_group = 'FIAP-IA'
-# workspace_name = 'grupo-demo-1-vini'
+subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
+resource_group = 'FIAP-IA'
+workspace_name = 'grupo-demo-1-vini'
 
-# workspace = Workspace(subscription_id, resource_group, workspace_name)
-# workspace = Workspace.from_config()
+workspace = Workspace(subscription_id, resource_group, workspace_name)
+workspace = Workspace.from_config()
 
 def norm(x, train_stats):
   return (x - train_stats['mean']) / train_stats['std']
@@ -33,12 +33,12 @@ def main():
     target = 'Status'
     EPOCHS = 5
 
-    # experiment = Experiment(workspace=workspace, name="federation_model")
-    # run = experiment.start_logging(run_id=str(uuid.uuid1()),
-    #                            display_name="Federation Model " + str(uuid.uuid1()),
-    #                            outputs="model",
-    #                            snapshot_directory="federation-model-data")
-    # run.log("Type", "Federation Model")
+    experiment = Experiment(workspace=workspace, name="federation_model")
+    run = experiment.start_logging(run_id=str(uuid.uuid1()),
+                               display_name="Federation Model " + str(uuid.uuid1()),
+                               outputs="model",
+                               snapshot_directory="federation-model-data")
+    run.log("Type", "Federation Model")
 
     train_dataset = dataset.sample(frac=0.8,random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
@@ -68,13 +68,13 @@ def main():
                       
     loss, accuracy = model.evaluate(normed_test_data, test_labels, verbose=2)
     print("Testing set Accuracy: {:5.2f} ".format(accuracy))
-    # run.log("Accurary:", accuracy)
+    run.log("Accurary:", accuracy)
 
     model.save('tmp/models/federation_model.h5')
 
-    # run.upload_file(name='federation_model.h5', path_or_stream=f'tmp/models/federation_model.h5')
-    # run.complete()
-    # run.wait_for_completion()
+    run.upload_file(name='federation_model.h5', path_or_stream=f'tmp/models/federation_model.h5')
+    run.complete()
+    run.wait_for_completion()
 
     bucket_name = os.getenv('BUCKET_NAME')
     service_account_json_path = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
