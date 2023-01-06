@@ -18,5 +18,4 @@ ARG PORT=8080
 
 EXPOSE $PORT
 
-# ENTRYPOINT ["R", "-e", "source('r_model/server.R'); library(plumber); pb <- pr('r_model/plumber.R'); pr_run(port=${PORT}, host='0.0.0.0', pr=pb)"]
 CMD R -e "source('r_model/server.R'); library(plumber); pb <- pr('r_model/plumber.R'); pr_run(port=${PORT}, host='0.0.0.0', pr=pb)"
