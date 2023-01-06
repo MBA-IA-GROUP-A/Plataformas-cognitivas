@@ -69,5 +69,5 @@ function(req, res)
   )
   output = list(result = predict(modelo, df, type='response'))
   output = ifelse(output>0.5, 1, 0)
-  return(output)
+  return(list(result = output))
 }
