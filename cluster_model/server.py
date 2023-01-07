@@ -1,10 +1,10 @@
 import json
 import pandas as pd
 import numpy as np
+import subprocess
 from flask import Flask, request
 import os
 import threading
-import cluster_model._train as _train
 import sys
 import joblib
 
@@ -63,8 +63,10 @@ def predict(request = request):
     return app.response_class(response=ret, status=500, mimetype='application/json')
 
 if __name__ == '__main__':
-  if not os.path.exists('tmp/models/kmeans.joblib'):
-    _train.main()
+  pathToFederationModel = 'tmp/models/kmeans.joblib'
+  if (os.path.exists(pathToFederationModel) == False):
+    print('Cluster Model not found, train a new model...')
+    subprocess.run(["python", "cluster_model/train.py"])
 
   print(f"Server, id: {os.getpid()}, thread: {threading.current_thread().ident}")
   args = sys.argv[1:]

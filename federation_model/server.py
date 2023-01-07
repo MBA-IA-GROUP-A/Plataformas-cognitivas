@@ -7,7 +7,6 @@ import threading
 from flask import Flask, request
 import subprocess
 import tensorflow as tf
-import train
 import sys
 
 class NpEncoder(json.JSONEncoder):
@@ -27,10 +26,6 @@ app = Flask(__name__)
 # Define a route for the model
 @app.route('/predict', methods=['POST'])
 def predict(request = request):
-  pathToFederationModel = 'tmp/models/federation_model.h5'
-  if (os.path.exists(pathToFederationModel) == False):
-    print('Federation Model not found, train a new model...')
-    subprocess.run(["python", "federation_model/train.py"])
   try:
     model = tf.keras.models.load_model('tmp/models/federation_model.h5')
 
@@ -51,8 +46,10 @@ def predict(request = request):
     return app.response_class(response=ret, status=500, mimetype='application/json')
 
 if __name__ == '__main__':
-  if not os.path.exists('tmp/models/federation_model.h5'):
-    train.main()
+  pathToFederationModel = 'tmp/models/federation_model.h5'
+  if (os.path.exists(pathToFederationModel) == False):
+    print('Federation Model not found, train a new model...')
+    subprocess.run(["python", "federation_model/train.py"])
 
   print(f"Server, id: {os.getpid()}, thread: {threading.current_thread().ident}")
   args = sys.argv[1:]

@@ -5,7 +5,7 @@ echo "build r_model"
 docker build -t r_model -f R.dockerfile .
 
 echo "build cluster_model"
-docker build -t cluster_model -f . --build-arg=APP=cluster_model
+docker build -t cluster_model --build-arg=APP=cluster_model . 
 
 echo "build modelmanager"
 docker build -t modelmanager -f dockerfile.model_manager .
@@ -18,6 +18,9 @@ docker run -d --network plat_network -p 10001:8080 --restart always --name feder
 
 echo "run r_model"
 docker run -d --network plat_network -p 10002:8080 --restart always --name r_model r_model R -e "source('r_model/server.R'); library(plumber); pb <- pr('r_model/plumber.R'); pr_run(port=8080, host='0.0.0.0', pr=pb)"
+
+echo "run cluster_model"
+docker run -d --network plat_network -p 10003:8080 --restart always --name cluster_model cluster_model python cluster_model/server.py 8080
 
 echo "generate config"
 bash generate_config.sh
