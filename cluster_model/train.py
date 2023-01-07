@@ -5,37 +5,27 @@ import os
 sys.path.append('normalization')
 from normalization import NormalizedData
 from sklearn.cluster import KMeans
-from sklearn.preprocessing import MinMaxScaler
 
 if __name__ == "__main__":
-    ms = MinMaxScaler()
-    normalized_data = NormalizedData()
-    dataset = normalized_data.normalize_data()
+  normalized_data = NormalizedData()
+  dataset = pd.DataFrame(normalized_data.normalize_data())
 
-    target = dataset['Status']
+  X = dataset.drop(['Status'], axis=1)
+  kmeans = KMeans(n_clusters=4)
+  kmeans.fit(X)
+  labels = kmeans.labels_
+  print(labels)
+  dataset['cluster'] = kmeans.predict(X)
+  
+  model_name = 'kmeans.joblib'
+  dir = 'tmp/models'
 
-    dataset.drop(['Status'], axis=1, inplace=True)
+  grouped = dataset.groupby('cluster')
+  # save percentage of frauds in each cluster in a json file
+  fraud_propensity = grouped['Status'].mean()
+  fraud_propensity.to_json('tmp/models/fraud_propensity.json', orient='records')
 
-    X = dataset
-    cols = X.columns
-    X = ms.fit_transform(X)
-    X = pd.DataFrame(X, columns=[cols])
+  if not os.path.isdir(dir):
+    os.makedirs(dir)
 
-    kmeans = KMeans(n_clusters=2, random_state=42)
-    kmeans.fit(X)
-    labels = kmeans.labels_
-    correct_labels = sum(target == labels)
-
-    pred = kmeans.predict(X)
-    print(pred)
-    
-    print(
-        f"Result: {correct_labels} out of {target.size} samples were correctly labeled.")
-    print(f"Accuracy score: {correct_labels/float(target.size)}")
-
-    model_name = 'kmeans.joblib'
-    dir = 'tmp/models'
-
-    if not os.path.isdir(dir):
-        os.makedirs(dir)
-    joblib.dump(kmeans, filename=f'tmp/models/{model_name}')
+  joblib.dump(kmeans, filename=f'tmp/models/{model_name}')

@@ -19,15 +19,6 @@ class NpEncoder(json.JSONEncoder):
     else:
       return super(NpEncoder, self).default(obj)
 
-def get_cluster_label(cluster_number):
-  dict = {
-    0: 'High income',
-    1: 'Low income',
-    2: 'Very High income',
-    3: 'Average income',
-  }
-  return dict[int(cluster_number)]
-
 # Define the Flask app
 app = Flask(__name__)
 
@@ -39,24 +30,17 @@ def predict(request = request):
   try:
     model = joblib.load('tmp/models/kmeans.joblib')
 
-    body = request.get_json()
-    data = body['data']
+    data = request.get_json()
 
     # verify data shape matriz 1x51
-    if len(data) != 51:
-      ret = json.dumps({"error_message": "Expected data shape: 51"})
+    if len(data) != 1 or len(data[0]) != 51:
+      ret = json.dumps({"error_message": "Expected data shape: 1x51"})
       return app.response_class(response=ret, status=400, mimetype='application/json')
 
-    predictions = model.predict([data])
-    fraud_propensity = None
-    with open('tmp/models/fraud_propensity.json') as f:
-      fraud_propensity = json.load(f)
+    predictions = model.predict(data)
+    # example of prediction format: [1 1 1 ... 0 0 0]
 
-    ret = json.dumps({ 'result': {
-      'cluster': predictions[0],
-      'cluster_name': get_cluster_label(predictions[0]),
-      'fraud_propensity': fraud_propensity[int(predictions[0])]
-    } }, cls=NpEncoder)
+    ret = json.dumps({ 'result': predictions[0] }, cls=NpEncoder)
     return app.response_class(response=ret, status=200, mimetype='application/json')
   except Exception as err:
     ret = json.dumps({"error_message": str(err)})

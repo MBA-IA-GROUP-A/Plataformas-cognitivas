@@ -4,6 +4,9 @@ docker build -t federation_model .
 echo "build r_model"
 docker build -t r_model -f R.dockerfile .
 
+echo "build cluster_model"
+docker build -t cluster_model -f . --build-arg=APP=cluster_model
+
 echo "build modelmanager"
 docker build -t modelmanager -f dockerfile.model_manager .
 
