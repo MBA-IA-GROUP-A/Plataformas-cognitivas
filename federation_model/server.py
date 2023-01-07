@@ -5,6 +5,7 @@ from flask import Flask, request
 import os
 import threading
 from flask import Flask, request
+import subprocess
 import tensorflow as tf
 import train
 import sys
@@ -26,19 +27,22 @@ app = Flask(__name__)
 # Define a route for the model
 @app.route('/predict', methods=['POST'])
 def predict(request = request):
-  print(request.values)
-
+  pathToFederationModel = 'tmp/models/federation_model.h5'
+  if (os.path.exists(pathToFederationModel) == False):
+    print('Federation Model not found, train a new model...')
+    subprocess.run(["python", "federation_model/train.py"])
   try:
     model = tf.keras.models.load_model('tmp/models/federation_model.h5')
 
-    data = request.get_json()
+    body = request.get_json()
+    data = body['data']
 
     # verify data shape matriz 1x51
-    if len(data) != 1 or len(data[0]) != 51:
+    if len(data) != 51:
       ret = json.dumps({"error_message": "Expected data shape: 1x51"})
       return app.response_class(response=ret, status=400, mimetype='application/json')
 
-    predictions = model.predict(data)
+    predictions = model.predict([data])
 
     ret = json.dumps({ 'result': predictions[0][0] }, cls=NpEncoder)
     return app.response_class(response=ret, status=200, mimetype='application/json')

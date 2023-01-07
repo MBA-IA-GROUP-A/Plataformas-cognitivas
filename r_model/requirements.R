@@ -1,0 +1,6 @@
+# install.packages('curl')
+# install.packages('sodium')
+# install.packages('webutils')
+install.packages('caTools')
+install.packages('plumber')
+install.packages("ROCR")

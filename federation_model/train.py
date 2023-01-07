@@ -8,16 +8,16 @@ import sys
 import uuid
 import os
 from azureml.core.authentication import InteractiveLoginAuthentication
-sys.path.append('normalization')
-from normalization import NormalizedData
+import os
+sys.path.append(os.getcwd())
+from normalization.normalization import NormalizedData
 from azureml.core import Workspace, Experiment
-import glob
 
 load_dotenv('.env')
 
-# subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
-# resource_group = 'FIAP-IA'
-# workspace_name = 'grupo-demo-1-vini'
+subscription_id = 'b15f68e0-7760-476f-b1d4-45c98a555e2a'
+resource_group = 'FIAP-IA'
+workspace_name = 'grupo-demo-1-vini'
 
 # workspace = Workspace(subscription_id, resource_group, workspace_name)
 # workspace = Workspace.from_config()

@@ -8,9 +8,9 @@
       "version": "V01",                               
       "url": "http://:8080/predict"          
     },                                                
-    "classification_model": {                                     
+    "r_model": {                                     
       "version": "V01",                               
-      "url": "http://:8080/predict"          
+      "url": "http://172.18.0.3:8080/predict"          
     }                                                 
   }                                                   
 }                                                     
