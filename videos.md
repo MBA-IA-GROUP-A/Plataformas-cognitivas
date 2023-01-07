@@ -2,7 +2,7 @@
 
 ## Video com tudo funcionando
 
-TODO
+[aqui](https://www.youtube.com/watch?v=1-PQt9W7OF0)
 
 ## Video sobre o modelo de redes neurais
 
