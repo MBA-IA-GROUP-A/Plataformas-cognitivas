@@ -138,7 +138,6 @@ def prepare_vm():
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'config', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'r_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'cluster_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
-  subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'explore_data', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "scp", "--zone", "us-central1-a", "--recurse", 'federation_model', "model-manager-vm:~/Plataformas/", "--project", "wallbee-app"])
   subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./vm/setup_vm.sh'"])
   subprocess.run(["gcloud", "compute", "ssh", "--zone", "us-central1-a", "model-manager-vm", "--project", "wallbee-app", "--command", "sudo bash -c 'cd ~/Plataformas && ./run_model_manager.sh'"])
@@ -147,11 +146,6 @@ def prepare_vm():
   pass
 
 if __name__ == "__main__":
-  pathToFederationModel = 'tmp/models/federation_model.h5'
-  if (os.path.exists(pathToFederationModel) == False):
-    print('Federation Model not found, train a new model...')
-    subprocess.run(["python", "federation_model/train.py"])
-
   os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('SERVICE_ACCOUNT_JSON_PATH')
 
   compute = googleapiclient.discovery.build('compute', 'v1')
@@ -198,7 +192,7 @@ if __name__ == "__main__":
       vm_ip = instance['networkInterfaces'][0]['accessConfigs'][0]['natIP']
       break
 
-  time.sleep(10)
+  time.sleep(30)
   prepare_vm()
 
   print('Endpoint URL:', 'http://{}:443'.format(vm_ip))
