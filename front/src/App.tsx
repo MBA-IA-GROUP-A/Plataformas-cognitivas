@@ -124,7 +124,7 @@ export default class App extends React.Component<IProps, IState> {
                   <Select
                     value={this.state.model}
                     onChange={(value) => {
-                      this.setState({ model: value })
+                      this.setState({ model: value, result: null })
                     }}
                     id="model-selection"
                     name="model-selection"
@@ -169,10 +169,20 @@ export default class App extends React.Component<IProps, IState> {
                       </p>
                     )}
                     {this.state.model === 'cluster_model' && (
-                      <p>
-                        <strong>Cluster: </strong>
-                        {this.state.result}
-                      </p>
+                      <>
+                        <p>
+                          <strong>Cluster: </strong>
+                          {this.state.result.cluster}
+                        </p>
+                        <p>
+                          <strong>Label: </strong>
+                          {this.state.result.cluster_name}
+                        </p>
+                        <p>
+                          <strong>Inadimplencia média: </strong>
+                          {(this.state.result.fraud_propensity * 100).toFixed(2)}%
+                        </p>
+                      </>
                     )}
                   </div>
                 </div>
