@@ -34,8 +34,8 @@ if __name__ == "__main__":
     print(f"Accuracy score: {correct_labels/float(target.size)}")
 
     model_name = 'kmeans.joblib'
-    dir = 'tmp/models/cluster_model/'
+    dir = 'tmp/models'
 
     if not os.path.isdir(dir):
         os.makedirs(dir)
-    joblib.dump(kmeans, filename=f'tmp/models/cluster_model/{model_name}')
+    joblib.dump(kmeans, filename=f'tmp/models/{model_name}')
